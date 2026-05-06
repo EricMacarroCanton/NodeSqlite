@@ -29,8 +29,13 @@ db.serialize(() => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+
 app.post("/api/addData", (req, res) => {
   const { table, camp, valor } = req.body;
+  
+  const allowedTables = ["artists", "albums"];
+  if (!allowedTables.includes(table)) return res.status(400).json({ error: "Taula no vàlida" });
+
   const sql = `INSERT INTO ${table} (${camp}) VALUES (?)`;
   
   db.run(sql, [valor], function(err) {
@@ -60,7 +65,7 @@ app.post("/api/artists", (req, res) => {
 app.delete("/api/deleteData/:table/:id", (req, res) => {
   const { table, id } = req.params;
   
-  const allowedTables = ["artists", "albums", "songs"];
+  const allowedTables = ["artists", "albums"];
   if (!allowedTables.includes(table)) return res.status(400).send("Taula no vàlida");
 
   const sql = `DELETE FROM ${table} WHERE id = ?`;
@@ -70,6 +75,7 @@ app.delete("/api/deleteData/:table/:id", (req, res) => {
     res.json({ message: `Registre eliminat de ${table}`, changes: this.changes });
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Servidor a http://localhost:${PORT}`);
 });

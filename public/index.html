@@ -17,7 +17,7 @@
     </section>
 
     <section class="card">
-      <h2>2) Afegir Àlbum (Relacional)</h2>
+      <h2>2) Afegir Àlbum </h2>
       <form id="album-form">
         <label>Artista existent:</label>
         <select id="artist-select" required>
@@ -34,12 +34,22 @@
       <button id="load-btn">Carregar / Actualitzar dades</button>
       <p id="artist-output" style="background: #f4f4f4; padding: 10px; border-radius: 5px;">Prem el botó per carregar.</p>
     </section>
-<section class="card">
-  <h2>4) Eliminar Artista</h2>
-  <p>Selecciona un artista de la llista desplegable de la secció d'àlbums i prem el botó:</p>
-  <button type="button" id="delete-artist-btn" style="background-color: #ff4d4d; color: white;">
-    Eliminar Artista Seleccionat
-  </button>
+<section class="card" style="border: 1px solid #ff4d4d; padding: 15px; margin-top: 20px;">
+  <h2>4) Eliminar Artista (Secció Independent)</h2>
+  <p>1. Prem "Actualitzar llista" per carregar els artistes al desplegable.</p>
+  
+  <button type="button" id="btn-refresh-delete">Actualitzar llista per eliminar</button>
+  
+  <div style="margin-top: 15px;">
+    <label>Selecciona l'artista a esborrar:</label>
+    <select id="artist-delete-select">
+      <option value="">Esperant actualització</option>
+    </select>
+    
+    <button type="button" id="btn-confirm-delete" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; cursor: pointer;">
+      Eliminar definitivament
+    </button>
+  </div>
 </section>
   </main>
   <script src="app.js"></script>

@@ -73,30 +73,56 @@ testAddButton.addEventListener("click", async () => {
     const message = await res.json();
     console.log(message);
 });
-const deleteArtistBtn = document.getElementById("delete-artist-btn");
 
-deleteArtistBtn.addEventListener("click", async () => {
-    const artistId = document.getElementById("artist-select").value;
+document.getElementById("btn-refresh-delete").addEventListener("click", async () => {
+    try {
+        const res = await fetch("/api/artists", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: "artists" })
+        });
+        const json = await res.json();
+        
+        const selectDelete = document.getElementById("artist-delete-select");
+        selectDelete.innerHTML = '<option value="">-- Selecciona un artista --</option>';
+        
+        json.result.forEach(artista => {
+            let opt = document.createElement("option");
+            opt.value = artista.id;
+            opt.textContent = artista.name;
+            selectDelete.appendChild(opt);
+        });
+        
+        console.log("Desplegable d'eliminació actualitzat");
+    } catch (error) {
+        console.error("Error carregant llista d'eliminació:", error);
+    }
+});
 
-    if (!artistId) {
-        alert("Si us plau, selecciona un artista del desplegable primer (recorda prémer 'Carregar').");
+document.getElementById("btn-confirm-delete").addEventListener("click", async () => {
+    const idParaBorrar = document.getElementById("artist-delete-select").value;
+
+    if (!idParaBorrar) {
+        alert("Si us plau, selecciona un artista primer.");
         return;
     }
 
-    if (!confirm("Estàs segur que vols eliminar aquest artista?")) return;
+    if (!confirm("Estàs segur? Aquesta acció no es pot desfer.")) return;
 
     try {
-        const res = await fetch(`/api/deleteData/artists/${artistId}`, {
+        const res = await fetch(`/api/deleteData/artists/${idParaBorrar}`, {
             method: "DELETE"
         });
 
-        const result = await res.json();
-        
         if (res.ok) {
-            alert(result.message);
-            document.getElementById("load-btn").click();
+            alert("Artista eliminat amb èxit.");
+            // Netegem el desplegable i actualitzem la llista general
+            document.getElementById("btn-refresh-delete").click();
+            if(document.getElementById("load-btn")) document.getElementById("load-btn").click();
+        } else {
+            alert("Error en eliminar l'artista.");
         }
     } catch (error) {
-        console.error("Error eliminant:", error);
+        console.error("Error en la petició DELETE:", error);
     }
 });
