@@ -6,7 +6,7 @@ const artistOutput = document.getElementById("artist-output");
 const artistNameInput = document.getElementById("artist-name");
 
 form.addEventListener("submit", async (event) => {
-  event.preventDefault();//per defecte recarregaria la pagina així que evitem això.
+  event.preventDefault();
 
   const name = artistNameInput.value.trim();
   if (!name) return;
@@ -36,14 +36,12 @@ loadButton.addEventListener("click", async () => {
       "Content-Type": "application/json"
     },
 
-    // Cos de la petició (les dades que enviem)
-    // Convertim l’objecte JS a text JSON
+    
     body: JSON.stringify({ data: text })
   });
 
-  // El servidor respon amb JSON
+  
   const json = await res.json();
-  // Mostrem el resultat a la textarea de sortida
   artistOutput.textContent = JSON.stringify(json.result, null, 2);
 
 });
