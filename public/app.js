@@ -33,7 +33,6 @@ loadButton.addEventListener("click", async () => {
     
     artistOutput.textContent = json.result.map(a => a.name).join(", ");
 
-    // Omplir el selector d'àlbums (Requisit PDF)[cite: 1]
     const select = document.getElementById("artist-select");
     if (select) {
         select.innerHTML = '<option value="">Selecciona un artista...</option>';
@@ -69,7 +68,7 @@ testAddButton.addEventListener("click", async () => {
     const res = await fetch("/api/addData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table: "artists", camp: "name", valor: "Bon Jovi" })
+        body: JSON.stringify({ table: "artists", camp: "name", valor: "Quevedo" })
     });
     const message = await res.json();
     console.log(message);
