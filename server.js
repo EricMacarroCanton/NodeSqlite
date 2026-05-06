@@ -29,15 +29,12 @@ db.serialize(() => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-
 app.post("/api/addData", (req, res) => {
   const { table, camp, valor } = req.body;
-  
   const allowedTables = ["artists", "albums"];
   if (!allowedTables.includes(table)) return res.status(400).json({ error: "Taula no vàlida" });
 
   const sql = `INSERT INTO ${table} (${camp}) VALUES (?)`;
-  
   db.run(sql, [valor], function(err) {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({ message: "Dada desada correctament", id: this.lastID });
@@ -47,7 +44,6 @@ app.post("/api/addData", (req, res) => {
 app.post("/api/addAlbum", (req, res) => {
   const { title, artist_id } = req.body;
   const sql = `INSERT INTO albums (title, artist_id) VALUES (?, ?)`;
-  
   db.run(sql, [title, artist_id], function(err) {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({ message: "Àlbum desat" });
@@ -64,12 +60,10 @@ app.post("/api/artists", (req, res) => {
 
 app.delete("/api/deleteData/:table/:id", (req, res) => {
   const { table, id } = req.params;
-  
   const allowedTables = ["artists", "albums"];
   if (!allowedTables.includes(table)) return res.status(400).send("Taula no vàlida");
 
   const sql = `DELETE FROM ${table} WHERE id = ?`;
-  
   db.run(sql, [id], function(err) {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: `Registre eliminat de ${table}`, changes: this.changes });
@@ -77,5 +71,5 @@ app.delete("/api/deleteData/:table/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor a http://localhost:${PORT}`);
+  console.log(`Servidor actiu a http://localhost:${PORT}`);
 });
