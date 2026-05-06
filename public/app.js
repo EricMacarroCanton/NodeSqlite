@@ -1,53 +1,49 @@
-﻿const form = document.getElementById("artist-form");
-const albumForm = document.getElementById("album-form");
-const loadButton = document.getElementById("load-btn");
+﻿const formArtist = document.getElementById("artist-form");
+const formAlbum = document.getElementById("album-form");
+const loadBtn = document.getElementById("load-btn");
+const artistSelect = document.getElementById("artist-select");
 const artistOutput = document.getElementById("artist-output");
 
-form.addEventListener("submit", async (event) => {
-    event.preventDefault(); 
-    const name = document.getElementById("artist-name").value.trim();
-    if (!name) return;
 
+formArtist.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("artist-name").value;
     const res = await fetch("/api/addData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ table: "artists", camp: "name", valor: name })
     });
-
-    if (res.ok) {
-        artistOutput.textContent = "Artista " + name + " desat!";
-        form.reset();
-        // Opcional: Actualitzem automàticament la llista d'eliminació
-        document.getElementById("btn-refresh-delete").click();
-    }
+    if (res.ok) { alert("Artista desat!"); formArtist.reset(); }
 });
 
-loadButton.addEventListener("click", async () => {
+loadBtn.addEventListener("click", async () => {
     const res = await fetch("/api/artists", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: "artists" })
     });
     const json = await res.json();
-    
     artistOutput.textContent = json.result.map(a => a.name).join(", ");
-
-    const select = document.getElementById("artist-select");
-    select.innerHTML = '<option value="">Selecciona un artista...</option>';
+    
+    // Omplim el selector de la secció d'àlbums
+    artistSelect.innerHTML = '<option value="">-- Selecciona artista --</option>';
     json.result.forEach(a => {
         let opt = document.createElement("option");
         opt.value = a.id;
         opt.textContent = a.name;
-        select.appendChild(opt);
+        artistSelect.appendChild(opt);
     });
 });
 
-albumForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const title = document.getElementById("album-title").value;
-    const artist_id = document.getElementById("artist-select").value;
 
-    if (!artist_id) return alert("Selecciona un artista primer");
+formAlbum.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const title = document.getElementById("album-title").value;
+    const artist_id = artistSelect.value;
+
+    console.log("Intentant desar àlbum:", { title, artist_id });
+
+    if (!artist_id) return alert("Selecciona un artista!");
 
     const res = await fetch("/api/addAlbum", {
         method: "POST",
@@ -56,10 +52,43 @@ albumForm.addEventListener("submit", async (event) => {
     });
 
     if (res.ok) {
-        alert("Àlbum desat!");
-        albumForm.reset();
+        alert("Àlbum creat!");
+        formAlbum.reset();
+    } else {
+        alert("Error en desar l'àlbum");
     }
 });
+
+
+document.getElementById("btn-refresh-albums").addEventListener("click", async () => {
+    const res = await fetch("/api/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: "albums" })
+    });
+    const json = await res.json();
+    const sel = document.getElementById("album-delete-select");
+    sel.innerHTML = '<option value="">-- Selecciona àlbum --</option>';
+    json.result.forEach(alb => {
+        let opt = document.createElement("option");
+        opt.value = alb.id;
+        opt.textContent = alb.title;
+        sel.appendChild(opt);
+    });
+});
+
+document.getElementById("btn-delete-album").addEventListener("click", async () => {
+    const id = document.getElementById("album-delete-select").value;
+    if (!id) return alert("Tria un àlbum!");
+    if (!confirm("Eliminar l'àlbum?")) return;
+
+    const res = await fetch(`/api/deleteData/albums/${id}`, { method: "DELETE" });
+    if (res.ok) {
+        alert("Àlbum eliminat");
+        document.getElementById("btn-refresh-albums").click();
+    }
+});
+
 
 document.getElementById("btn-refresh-delete").addEventListener("click", async () => {
     const res = await fetch("/api/artists", {
@@ -68,30 +97,22 @@ document.getElementById("btn-refresh-delete").addEventListener("click", async ()
         body: JSON.stringify({ data: "artists" })
     });
     const json = await res.json();
-    
-    const selectDelete = document.getElementById("artist-delete-select");
-    selectDelete.innerHTML = '<option value="">-- Selecciona un artista --</option>';
-    
-    json.result.forEach(artista => {
+    const sel = document.getElementById("artist-delete-select");
+    sel.innerHTML = '<option value="">-- Selecciona artista --</option>';
+    json.result.forEach(a => {
         let opt = document.createElement("option");
-        opt.value = artista.id;
-        opt.textContent = artista.name;
-        selectDelete.appendChild(opt);
+        opt.value = a.id;
+        opt.textContent = a.name;
+        sel.appendChild(opt);
     });
-    console.log("Llista d'eliminació actualitzada");
 });
 
 document.getElementById("btn-confirm-delete").addEventListener("click", async () => {
-    const idParaBorrar = document.getElementById("artist-delete-select").value;
-    if (!idParaBorrar) return alert("Selecciona un artista!");
-
-    if (!confirm("Vols eliminar l'artista?")) return;
-
-    const res = await fetch(`/api/deleteData/artists/${idParaBorrar}`, { method: "DELETE" });
-
+    const id = document.getElementById("artist-delete-select").value;
+    if (!id) return alert("Tria artista!");
+    const res = await fetch(`/api/deleteData/artists/${id}`, { method: "DELETE" });
     if (res.ok) {
-        alert("Eliminat.");
-        document.getElementById("btn-refresh-delete").click(); 
-        loadButton.click(); 
+        alert("Artista eliminat");
+        document.getElementById("btn-refresh-delete").click();
     }
 });

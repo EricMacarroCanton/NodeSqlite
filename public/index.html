@@ -17,51 +17,49 @@
     </section>
 
     <section class="card">
-  <h2>2) Afegir Àlbum</h2>
-  <form id="album-form">
-    <label>Selecciona l'artista (Propietari de l'àlbum):</label>
-    <select id="artist-select" required>
-      <option value="">-- Carrega la llista primer --</option>
-    </select>
-    <br><br>
-    <input id="album-title" placeholder="Títol de l'àlbum" required />
-    <button type="submit">Desar Àlbum</button>
-  </form>
-</section>
+      <h2>2) Afegir Àlbum</h2>
+      <form id="album-form">
+        <label>Selecciona l'artista:</label>
+        <select id="artist-select" required>
+          <option value="">-- Carrega la llista primer --</option>
+        </select>
+        <br><br>
+        <input id="album-title" placeholder="Títol de l'àlbum" required />
+        <button type="submit">Desar Àlbum</button>
+      </form>
+    </section>
 
     <section class="card">
-      <h2>3) Consultar llistes</h2>
-      <button id="load-btn">Carregar / Actualitzar dades</button>
-      <p id="artist-output" style="background: #f4f4f4; padding: 10px; border-radius: 5px;">Llista d'artistes buida.</p>
+      <h2>3) Consultar Artistes</h2>
+      <button id="load-btn">Carregar / Actualitzar Artistes</button>
+      <p id="artist-output" style="background: #f4f4f4; padding: 10px; border-radius: 5px;">Llista buida.</p>
+    </section>
+
+    <section class="card" style="border: 1px solid #ff9800; padding: 15px; margin-top: 20px;">
+      <h2>4) Eliminar Àlbums</h2>
+      <button type="button" id="btn-refresh-albums">Actualitzar llista d'àlbums</button>
+      <div style="margin-top: 15px;">
+        <select id="album-delete-select">
+          <option value="">-- Selecciona àlbum --</option>
+        </select>
+        <button type="button" id="btn-delete-album" style="background-color: #f44336; color: white; border: none; padding: 8px 15px; cursor: pointer;">
+          Eliminar Àlbum
+        </button>
+      </div>
     </section>
 
     <section class="card" style="border: 1px solid #ff4d4d; padding: 15px; margin-top: 20px;">
-      <h2>4) Eliminar Artista</h2>
-      <button type="button" id="btn-refresh-delete">Actualitzar llista per eliminar</button>
+      <h2>5) Eliminar Artista</h2>
+      <button type="button" id="btn-refresh-delete">Actualitzar llista per eliminar artista</button>
       <div style="margin-top: 15px;">
         <select id="artist-delete-select">
           <option value="">-- Selecciona artista --</option>
         </select>
         <button type="button" id="btn-confirm-delete" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; cursor: pointer;">
-          Eliminar definitivament
+          Eliminar Artista
         </button>
       </div>
     </section>
-    <section class="card" style="border: 1px solid #ff9800; padding: 15px; margin-top: 20px;">
-  <h2>5) Gestionar i Eliminar Àlbums</h2>
-  <p>1. Prem per veure els àlbums existents a la base de dades.</p>
-  <button type="button" id="btn-refresh-albums">Actualitzar llista d'àlbums</button>
-  
-  <div style="margin-top: 15px;">
-    <label>Selecciona l'àlbum a esborrar:</label>
-    <select id="album-delete-select">
-      <option value="">-- Esperant llista --</option>
-    </select>
-    <button type="button" id="btn-delete-album" style="background-color: #f44336; color: white; border: none; padding: 8px 15px;">
-      Eliminar Àlbum Seleccionat
-    </button>
-  </div>
-</section>
   </main>
   <script src="app.js"></script>
 </body>
