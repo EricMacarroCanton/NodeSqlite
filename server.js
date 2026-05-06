@@ -29,7 +29,6 @@ db.serialize(() => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Endpoint per afegir dades genèriques (Corregit)
 app.post("/api/addData", (req, res) => {
   const { table, camp, valor } = req.body;
   const sql = `INSERT INTO ${table} (${camp}) VALUES (?)`;
