@@ -73,3 +73,30 @@ testAddButton.addEventListener("click", async () => {
     const message = await res.json();
     console.log(message);
 });
+const deleteArtistBtn = document.getElementById("delete-artist-btn");
+
+deleteArtistBtn.addEventListener("click", async () => {
+    const artistId = document.getElementById("artist-select").value;
+
+    if (!artistId) {
+        alert("Si us plau, selecciona un artista del desplegable primer (recorda prémer 'Carregar').");
+        return;
+    }
+
+    if (!confirm("Estàs segur que vols eliminar aquest artista?")) return;
+
+    try {
+        const res = await fetch(`/api/deleteData/artists/${artistId}`, {
+            method: "DELETE"
+        });
+
+        const result = await res.json();
+        
+        if (res.ok) {
+            alert(result.message);
+            document.getElementById("load-btn").click();
+        }
+    } catch (error) {
+        console.error("Error eliminant:", error);
+    }
+});

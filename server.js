@@ -57,6 +57,19 @@ app.post("/api/artists", (req, res) => {
   });
 });
 
+app.delete("/api/deleteData/:table/:id", (req, res) => {
+  const { table, id } = req.params;
+  
+  const allowedTables = ["artists", "albums", "songs"];
+  if (!allowedTables.includes(table)) return res.status(400).send("Taula no vàlida");
+
+  const sql = `DELETE FROM ${table} WHERE id = ?`;
+  
+  db.run(sql, [id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: `Registre eliminat de ${table}`, changes: this.changes });
+  });
+});
 app.listen(PORT, () => {
   console.log(`Servidor a http://localhost:${PORT}`);
 });
