@@ -12,10 +12,8 @@ fs.mkdirSync(dir, { recursive: true });
 
 const db = new sqlite3.Database(fitxerDB);
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS artists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)`);
-  db.run(`CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, artist_id INTEGER, FOREIGN KEY(artist_id) REFERENCES artists(id))`);
-});
+db.run("CREATE TABLE IF NOT EXISTS artists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+db.run("CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, artist_id INTEGER, FOREIGN KEY(artist_id) REFERENCES artists(id))");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
