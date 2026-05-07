@@ -53,4 +53,4 @@ app.delete("/api/deleteData/:table/:id", (req, res) => {
   });
 });
 
-app.listen(port, () => console.log("Servidor en marxa al port " + port));
+app.listen(PORT, () => console.log(`Servidor a http://localhost:${PORT}`)); 
