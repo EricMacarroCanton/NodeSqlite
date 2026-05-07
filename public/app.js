@@ -25,8 +25,7 @@ loadBtn.addEventListener("click", async () => {
     const json = await res.json();
     artistOutput.textContent = json.result.map(a => a.name).join(", ");
     
-    // Omplim el selector de la secció d'àlbums
-    artistSelect.innerHTML = '<option value="">-- Selecciona artista --</option>';
+    artistSelect.innerHTML = '<option value=""> Selecciona artista </option>';
     json.result.forEach(a => {
         let opt = document.createElement("option");
         opt.value = a.id;
@@ -43,7 +42,7 @@ formAlbum.addEventListener("submit", async (e) => {
 
     console.log("Intentant desar àlbum:", { title, artist_id });
 
-    if (!artist_id) return alert("Selecciona un artista!");
+    if (!artist_id) return alert("Selecciona un artista");
 
     const res = await fetch("/api/addAlbum", {
         method: "POST",
@@ -52,7 +51,7 @@ formAlbum.addEventListener("submit", async (e) => {
     });
 
     if (res.ok) {
-        alert("Àlbum creat!");
+        alert("Àlbum creat");
         formAlbum.reset();
     } else {
         alert("Error en desar l'àlbum");
@@ -68,7 +67,7 @@ document.getElementById("btn-refresh-albums").addEventListener("click", async ()
     });
     const json = await res.json();
     const sel = document.getElementById("album-delete-select");
-    sel.innerHTML = '<option value="">-- Selecciona àlbum --</option>';
+    sel.innerHTML = '<option value=""> Selecciona àlbum</option>';
     json.result.forEach(alb => {
         let opt = document.createElement("option");
         opt.value = alb.id;
@@ -98,7 +97,7 @@ document.getElementById("btn-refresh-delete").addEventListener("click", async ()
     });
     const json = await res.json();
     const sel = document.getElementById("artist-delete-select");
-    sel.innerHTML = '<option value="">-- Selecciona artista --</option>';
+    sel.innerHTML = '<option value=""> Selecciona artista </option>';
     json.result.forEach(a => {
         let opt = document.createElement("option");
         opt.value = a.id;
