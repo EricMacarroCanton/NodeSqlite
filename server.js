@@ -4,13 +4,13 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
-const PORT = 3000;
+const port = 3000;
 
-const dataDir = path.join(__dirname, "data");
-const dbPath = path.join(dataDir, "artists.db");
-fs.mkdirSync(dataDir, { recursive: true });
+const dir = path.join(__dirname, "data");
+const fitxerDB = path.join(dir, "musica.db"); // He canviat el nom del fitxer .db
+fs.mkdirSync(dir, { recursive: true });
 
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(fitxerDB);
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS artists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)`);
@@ -22,34 +22,35 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/api/addData", (req, res) => {
   const { table, camp, valor } = req.body;
-  db.run(`INSERT INTO ${table} (${camp}) VALUES (?)`, [valor], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ id: this.lastID });
+  db.run(`INSERT INTO ${table} (${camp}) VALUES (?)`, [valor], (err) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(201).send("ok");
   });
 });
 
 app.post("/api/addAlbum", (req, res) => {
   const { title, artist_id } = req.body;
-  db.run(`INSERT INTO albums (title, artist_id) VALUES (?, ?)`, [title, artist_id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: "Àlbum creat" });
+  db.run(`INSERT INTO albums (title, artist_id) VALUES (?, ?)`, [title, artist_id], (err) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(201).send("ok");
   });
 });
 
 app.post("/api/artists", (req, res) => {
-  const table = req.body.data;
-  db.all(`SELECT * FROM ${table} ORDER BY id DESC`, (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ result: rows });
+  const taula = req.body.data;
+  db.all(`SELECT * FROM ${taula} ORDER BY id DESC`, (err, files) => {
+    if (err) return res.status(500).send(err.message);
+    res.json({ result: files });
   });
 });
 
 app.delete("/api/deleteData/:table/:id", (req, res) => {
-  const { table, id } = req.params;
-  db.run(`DELETE FROM ${table} WHERE id = ?`, [id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Eliminat" });
+  const t = req.params.table;
+  const id = req.params.id;
+  db.run(`DELETE FROM ${t} WHERE id = ?`, [id], (err) => {
+    if (err) return res.status(500).send(err.message);
+    res.json({ status: "borrat" });
   });
 });
 
-app.listen(PORT, () => console.log(`Servidor a http://localhost:${PORT}`));
+app.listen(port, () => console.log("Servidor en marxa al port " + port));

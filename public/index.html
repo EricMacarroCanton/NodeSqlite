@@ -2,63 +2,52 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Gestió Musical RA6</title>
+  <title>El meu Projecte RA6</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main>
     <section class="card">
-      <h1>Gestió d'Artistes i Àlbums</h1>
-      <h2>1) Afegir artista</h2>
+      <h2>Afegir Artista</h2>
       <form id="artist-form">
-        <input id="artist-name" placeholder="Nom de l'artista" required />
-        <button type="submit">Desar Artista</button>
+        <input id="artist-name" placeholder="Nom..." required />
+        <button type="submit">Guardar</button>
       </form>
     </section>
 
     <section class="card">
-      <h2>2) Afegir Àlbum</h2>
+      <h2>Nou Àlbum</h2>
       <form id="album-form">
-        <label>Selecciona l'artista:</label>
         <select id="artist-select" required>
-          <option value=""> Carrega la llista primer </option>
+          <option value="">(Carrega la llista)</option>
         </select>
-        <br><br>
-        <input id="album-title" placeholder="Títol de l'àlbum" required />
-        <button type="submit">Desar Àlbum</button>
+        <input id="album-title" placeholder="Títol àlbum" required />
+        <button type="submit">Crear àlbum</button>
       </form>
     </section>
 
     <section class="card">
-      <h2>3) Consultar Artistes</h2>
-      <button id="load-btn">Carregar / Actualitzar Artistes</button>
-      <p id="artist-output" style="background: #f4f4f4; padding: 10px; border-radius: 5px;">Llista buida.</p>
+      <h2>Llistat</h2>
+      <button id="load-btn">Actualitzar dades</button>
+      <p id="artist-output">Encara no hi ha res.</p>
     </section>
 
-    <section class="card" style="border: 1px solid #ff9800; padding: 15px; margin-top: 20px;">
-      <h2>4) Eliminar Àlbums</h2>
-      <button type="button" id="btn-refresh-albums">Actualitzar llista d'àlbums</button>
-      <div style="margin-top: 15px;">
-        <select id="album-delete-select">
-          <option value=""> Selecciona àlbum </option>
-        </select>
-        <button type="button" id="btn-delete-album" style="background-color: #f44336; color: white; border: none; padding: 8px 15px; cursor: pointer;">
-          Eliminar Àlbum
-        </button>
-      </div>
+    <section class="card">
+      <h2>Borrar Àlbums</h2>
+      <button type="button" id="refrescador">Veure àlbums</button>
+      <select id="album-delete-select">
+        <option value="">--</option>
+      </select>
+      <button type="button" id="btn-delete-album">Borrar</button>
     </section>
 
-    <section class="card" style="border: 1px solid #ff4d4d; padding: 15px; margin-top: 20px;">
-      <h2>5) Eliminar Artista</h2>
-      <button type="button" id="btn-refresh-delete">Actualitzar llista per eliminar artista</button>
-      <div style="margin-top: 15px;">
-        <select id="artist-delete-select">
-          <option value=""> Selecciona artista </option>
-        </select>
-        <button type="button" id="btn-confirm-delete" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; cursor: pointer;">
-          Eliminar Artista
-        </button>
-      </div>
+    <section class="card">
+      <h2>Borrar Artista</h2>
+      <button type="button" id="btn-refresh-delete">Veure artistes</button>
+      <select id="artist-delete-select">
+        <option value="">--</option>
+      </select>
+      <button type="button" id="btn-confirm-delete">Eliminar</button>
     </section>
   </main>
   <script src="app.js"></script>
