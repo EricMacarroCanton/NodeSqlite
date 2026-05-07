@@ -18,7 +18,7 @@ db.run("CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY AUTOINCREMENT,
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.post("/api/addData", (req, res) => {
+app.post("/api/addData", function(req, res) {
   const { table, camp, valor } = req.body;
   db.run(`INSERT INTO ${table} (${camp}) VALUES (?)`, [valor], (err) => {
     if (err) return res.status(500).send(err.message);
@@ -26,7 +26,7 @@ app.post("/api/addData", (req, res) => {
   });
 });
 
-app.post("/api/addAlbum", (req, res) => {
+app.post("/api/addAlbum", function(req, res) {
   const { title, artist_id } = req.body;
   db.run(`INSERT INTO albums (title, artist_id) VALUES (?, ?)`, [title, artist_id], (err) => {
     if (err) return res.status(500).send(err.message);
@@ -36,13 +36,17 @@ app.post("/api/addAlbum", (req, res) => {
 
 app.post("/api/artists", (req, res) => {
   const taula = req.body.data;
+  console.log("Demanant dades de la taula: " + taula);
   db.all(`SELECT * FROM ${taula} ORDER BY id DESC`, (err, files) => {
-    if (err) return res.status(500).send(err.message);
+    if (err) {
+        console.log("error a la consulta"); 
+        return res.status(500).send(err.message);
+    }
     res.json({ result: files });
   });
 });
 
-app.delete("/api/deleteData/:table/:id", (req, res) => {
+app.delete("/api/deleteData/:table/:id", function(req, res) {
   const t = req.params.table;
   const id = req.params.id;
   db.run(`DELETE FROM ${t} WHERE id = ?`, [id], (err) => {
