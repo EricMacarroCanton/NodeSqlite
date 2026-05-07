@@ -53,4 +53,6 @@ app.delete("/api/deleteData/:table/:id", (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Servidor a http://localhost:${PORT}`)); 
+const PORT = 3000;
+
+app.listen(PORT, () => console.log(`Servidor a http://localhost:${PORT}`));
