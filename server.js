@@ -7,7 +7,7 @@ const app = express();
 const port = 3000;
 
 const dir = path.join(__dirname, "data");
-const fitxerDB = path.join(dir, "musica.db"); // He canviat el nom del fitxer .db
+const fitxerDB = path.join(dir, "musica.db"); 
 fs.mkdirSync(dir, { recursive: true });
 
 const db = new sqlite3.Database(fitxerDB);
