@@ -110,3 +110,111 @@ document.getElementById("btn-confirm-delete").addEventListener("click", async ()
         document.getElementById("btn-refresh-delete").click();
     }
 });
+
+document.getElementById("btn-refresh-edit").addEventListener("click", async () => {
+    const r = await fetch("/api/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: "artists" })
+    });
+    const d = await r.json();
+    const sel = document.getElementById("artist-edit-select");
+    sel.innerHTML = '<option value=""> Tria un artista </option>';
+    d.result.forEach(x => {
+        let o = document.createElement("option");
+        o.value = x.id;
+        o.textContent = x.name;
+        sel.appendChild(o);
+    });
+});
+
+document.getElementById("btn-confirm-edit").addEventListener("click", async () => {
+    const id = document.getElementById("artist-edit-select").value;
+    const nouNom = document.getElementById("artist-edit-name").value;
+    if (!id || !nouNom) return alert("S'ha de triar un artista i escriure un nou nom");
+
+    const r = await fetch(`/api/updateArtist/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nouNom })
+    });
+    if (r.ok) {
+        alert("Artista modificat!");
+        document.getElementById("artist-edit-name").value = "";
+        document.getElementById("btn-refresh-edit").click();
+    }
+});
+
+document.getElementById("btn-refresh-song-forms").addEventListener("click", async () => {
+    const rArt = await fetch("/api/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: "artists" })
+    });
+    const dArt = await rArt.json();
+    const selArt = document.getElementById("song-artist-select");
+    selArt.innerHTML = '<option value=""> Selecciona Artista </option>';
+    dArt.result.forEach(x => {
+        let o = document.createElement("option");
+        o.value = x.id;
+        o.textContent = x.name;
+        selArt.appendChild(o);
+    });
+
+    const rAlb = await fetch("/api/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: "albums" })
+    });
+    const dAlb = await rAlb.json();
+    const selAlb = document.getElementById("song-album-select");
+    selAlb.innerHTML = '<option value=""> Selecciona Àlbum </option>';
+    dAlb.result.forEach(x => {
+        let o = document.createElement("option");
+        o.value = x.id;
+        o.textContent = x.title;
+        selAlb.appendChild(o);
+    });
+});
+
+const cançoForm = document.getElementById("song-form");
+cançoForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const titolCanço = document.getElementById("song-title").value;
+    const idArtista = document.getElementById("song-artist-select").value;
+    const idAlbum = document.getElementById("song-album-select").value;
+
+    const r = await fetch("/api/addSong", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: titolCanço, album_id: idAlbum, artist_id: idArtista })
+    });
+
+    if (r.ok) {
+        alert("Cançó guardada correctament!");
+        cançoForm.reset();
+    }
+});
+
+document.getElementById("btn-refresh-songs").addEventListener("click", async () => {
+    const r = await fetch("/api/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: "songs" })
+    });
+    const d = await r.json();
+    const s = document.getElementById("song-delete-select");
+    s.innerHTML = '<option value=""> Selecciona una cançó </option>';
+    d.result.forEach(canc => {
+        let o = document.createElement("option");
+        o.value = canc.id;
+        o.textContent = canc.title;
+        s.appendChild(o);
+    });
+});
+
+document.getElementById("btn-delete-song").addEventListener("click", async () => {
+    const id = document.getElementById("song-delete-select").value;
+    if (!id) return alert("Tria una cançó");
+    if (!confirm("Segur que vols esborrar la cançó?")) return;
+});

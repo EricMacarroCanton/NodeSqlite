@@ -14,6 +14,7 @@ const db = new sqlite3.Database(fitxerDB);
 
 db.run("CREATE TABLE IF NOT EXISTS artists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
 db.run("CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, artist_id INTEGER, FOREIGN KEY(artist_id) REFERENCES artists(id))");
+db.run("CREATE TABLE IF NOT EXISTS songs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, album_id INTEGER, artist_id INTEGER, FOREIGN KEY(album_id) REFERENCES albums(id), FOREIGN KEY(artist_id) REFERENCES artists(id))");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -54,7 +55,22 @@ app.delete("/api/deleteData/:table/:id", function(req, res) {
     res.json({ status: "borrat" });
   });
 });
+app.put("/api/updateArtist/:id", function(req, res) {
+  const id = req.params.id;
+  const { name } = req.body;
+  db.run(`UPDATE artists SET name = ? WHERE id = ?`, [name, id], (err) => {
+    if (err) return res.status(500).send(err.message);
+    res.json({ status: "modificat" });
+  });
+});
 
+app.post("/api/addSong", function(req, res) {
+  const { title, album_id, artist_id } = req.body;
+  db.run(`INSERT INTO songs (title, album_id, artist_id) VALUES (?, ?, ?)`, [title, album_id, artist_id], (err) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(201).send("ok");
+  });
+});
 const PORT = 3000;
 
 app.listen(PORT, () => console.log(`Servidor a http://localhost:${PORT}`));

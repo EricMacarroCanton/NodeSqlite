@@ -49,7 +49,42 @@
       </select>
       <button type="button" id="btn-confirm-delete">Eliminar</button>
     </section>
+
+    <section class="card">
+      <h2>Modificar Artista</h2>
+      <button type="button" id="btn-refresh-edit">Carregar Artistes</button>
+      <select id="artist-edit-select">
+        <option value="">--</option>
+      </select>
+      <input id="artist-edit-name" placeholder="Nou nom..." />
+      <button type="button" id="btn-confirm-edit">Desar canvis</button>
+    </section>
+
+    <section class="card">
+      <h2>Nova Cançó</h2>
+      <button type="button" id="btn-refresh-song-forms">Carregar desplegables</button>
+      <form id="song-form">
+        <select id="song-artist-select" required>
+          <option value="">Selecciona Artista</option>
+        </select>
+        <select id="song-album-select" required>
+          <option value="">Selecciona Àlbum</option>
+        </select>
+        <input id="song-title" placeholder="Nom de la cançó" required />
+        <button type="submit">Guardar Cançó</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Borrar Cançons</h2>
+      <button type="button" id="btn-refresh-songs">Veure cançons</button>
+      <select id="song-delete-select">
+        <option value="">--</option>
+      </select>
+      <button type="button" id="btn-delete-song">Borrar</button>
+    </section>
   </main>
+  
   <script src="app.js"></script>
 </body>
 </html>
